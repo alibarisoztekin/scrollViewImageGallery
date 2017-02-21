@@ -10,4 +10,8 @@
 
 @interface SecondViewController : ViewController
 
+@property (nonatomic,weak) UIImage* zoomImage;
+
+
+
 @end

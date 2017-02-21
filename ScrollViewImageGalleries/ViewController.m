@@ -7,10 +7,12 @@
 //
 
 #import "ViewController.h"
+#import "SecondViewController.h"
 
 @interface ViewController () <UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIScrollView *galleryScrollView;
 @property (strong, nonatomic,readonly) NSArray<UIImage*>* imageArray;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
 
 @end
@@ -27,6 +29,25 @@
     
     
 }
+- (IBAction)tapToZoom:(UITapGestureRecognizer*)sender {
+    CGPoint tapLocation = [sender locationInView:self.galleryScrollView];
+    UIView * view = [self.galleryScrollView hitTest:tapLocation withEvent:nil];
+    
+    if ([view isKindOfClass:[UIImageView class]]) {
+        UIImageView * imageView = (UIImageView *)view;
+        [self performSegueWithIdentifier:@"detailSegue" sender:imageView.image];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    if ([segue.identifier isEqualToString:@"detailSegue"]) {
+        SecondViewController* secondVC =segue.destinationViewController;
+        secondVC.zoomImage= sender;
+    };
+    
+}
+
 
 -(NSArray<UIImage*>*) imageArray{
     return    @[[UIImage imageNamed:@"Lighthouse"],
@@ -44,12 +65,22 @@
         UIImageView* imageView =[[UIImageView alloc] initWithImage:image];
         imageView.frame = CGRectMake(scrollViewWidth*idx, 0,scrollViewWidth, scrollViewHeight);
         imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.userInteractionEnabled = YES;
         [self.galleryScrollView addSubview:imageView];
+        
     }];
     
     self.galleryScrollView.contentSize = CGSizeMake(self.imageArray.count*scrollViewWidth,
                                                     scrollViewHeight);
     
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+
+    NSInteger page = (NSInteger)
+    self.galleryScrollView.contentOffset.x/CGRectGetWidth(self.galleryScrollView.bounds);
+    self.pageControl.currentPage = page;
     
 }
 

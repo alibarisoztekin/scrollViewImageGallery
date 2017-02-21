@@ -21,6 +21,8 @@
     // Do any additional setup after loading the view.
     self.zoomScrollView.maximumZoomScale = 2;
     self.zoomScrollView.minimumZoomScale = 0.5;
+    self.zoomView.image = self.zoomImage;
+    
     
 }
 
@@ -29,11 +31,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.zoomView;
 }
 
+//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+//{
+//    
+//    if([segue.identifier isEqualToString:@"detailSegue"]){
+//        self.zoomView.image = sender;
+//        [self.view setNeedsDisplay];
+//    }
+//}
 /*
 #pragma mark - Navigation
 
